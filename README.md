@@ -12,11 +12,6 @@ use of the camera sensor, and simulates a weight scale class, among other things
 the primary aspect is the management of the main dashboard through which this fridge
 would be controller
 
-
-### Software Contents
-The project consists of 1 part:
-- **Pygame Client:** The singleplayer game client for SilverBall
-
 ### Development Progress
 
 - [ ] Camera Sensor:  
