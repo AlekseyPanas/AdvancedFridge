@@ -10,12 +10,9 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
 import java.awt.image.BufferedImage;
@@ -34,7 +31,7 @@ public class Camera extends Application {
         // capture = new VideoCapture();
     }
 
-    public static void main(String[] args) {
+    public void doLaunch (String[] args) {
         launch(args);
     }
 

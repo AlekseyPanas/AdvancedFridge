@@ -1,11 +1,12 @@
 public class Main {
     public static void main(String[] args) {
         // Creates main fridge object
-        //Fridge fridge = new Fridge();
+        Fridge fridge = new Fridge();
 
         // Runs main method (contains while loop, managed by fridge class)
-        //fridge.runFridge(args);
+        fridge.runFridge(args);
 
-        //Camera camera = new Camera();
+        Camera camera = new Camera();
+        camera.doLaunch(args);
     }
 }
