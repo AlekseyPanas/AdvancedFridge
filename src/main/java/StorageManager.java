@@ -18,8 +18,7 @@ public class StorageManager {
 
     public void add(int id) {
         int[] array = new int[storage.length + 1];
-        for (int i = 0; i < storage.length; i++)
-            array[i] = storage[i];
+        System.arraycopy(storage, 0, array, 0, storage.length);
         array[storage.length] = id;
         storage = array;
     }
