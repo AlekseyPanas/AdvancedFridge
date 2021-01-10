@@ -1,3 +1,4 @@
+import com.google.zxing.NotFoundException;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -21,7 +22,7 @@ public class Intake extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, NotFoundException {
         // Setting the image view
         ImageView imageView = new ImageView(rCamera.next());
 
