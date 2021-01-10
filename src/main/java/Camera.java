@@ -4,6 +4,7 @@ import javafx.scene.image.WritableImage;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -17,7 +18,7 @@ public class Camera {
     public Camera() {
         // Loading the OpenCV core library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        capture = new VideoCapture(0);
+        capture = new VideoCapture(0, Videoio.CAP_DSHOW);
         matrix = new Mat();
         id = null;
     }

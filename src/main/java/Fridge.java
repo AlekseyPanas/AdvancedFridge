@@ -13,19 +13,28 @@ public class Fridge extends Application {
 
     // Constructor
     public Fridge() {
+    }
+
+    // Startup method for fridge
+    public void runFridge(String[] args) {
+        // Creates class instances
         intake = new Intake();
         db = new Database();
         store = new StorageManager();
-    }
 
-    // Main method for fridge
-    public void runFridge(String[] args) {
+        // Launches JavaFX
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("main_scene.fxml"));
+
+        // Saves fridge contents upon closing
+        stage.setOnCloseRequest(e -> {
+            store.saveStorage();
+        });
+
         stage.setScene(new Scene(root, 700, 700));
         stage.show();
     }

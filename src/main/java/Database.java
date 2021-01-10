@@ -6,17 +6,15 @@ public class Database {
         connect();
     }
 
-    public void connect () {
+    // Establishes connection with database
+    private void connect () {
 
+        // Db connection
         Connection conn = null;
-
-        System.out.println("jdbc:sqlite:" + System.getProperty("user.dir").replace("\\", "/") +
-                "/src/main/resources/assets/sqlite/food.db");
 
         try {
             // db parameters
-            String url = "jdbc:sqlite:" + System.getProperty("user.dir").replace("\\", "/") +
-                    "/src/main/resources/assets/sqlite/food.db";
+            String url = "jdbc:sqlite:food.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
