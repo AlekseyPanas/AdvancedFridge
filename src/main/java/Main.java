@@ -6,8 +6,6 @@ public class Main {
         Fridge fridge = new Fridge();
         fridge.runFridge(args);
 
-        // new StorageManager().saveStorage();
-
         // Intake intake = new Intake();
         // intake.doLaunch(args);
 
