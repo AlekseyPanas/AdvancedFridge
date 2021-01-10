@@ -7,11 +7,13 @@ import javafx.stage.Stage;
 public class Fridge extends Application {
     // Creates Subclass objects
     // ------------------------
-    private Intake intake = new Intake();
-    private Database db = new Database();
+    private Intake intake;
+    private Database db;
 
     // Constructor
     public Fridge() {
+        Intake intake = new Intake();
+        Database db = new Database();
     }
 
     // Main method for fridge

@@ -4,7 +4,7 @@ public class Main {
         Fridge fridge = new Fridge();
         fridge.runFridge(args);
 
-        //Camera camera = new Camera();
-        //camera.doLaunch(args);
+        //Intake intake = new Intake();
+        //intake.doLaunch(args);
     }
 }
