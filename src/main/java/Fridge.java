@@ -3,6 +3,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Fridge extends Application {
     // Creates Subclass objects
@@ -16,7 +20,7 @@ public class Fridge extends Application {
     }
 
     // Startup method for fridge
-    public void runFridge(String[] args) {
+    public void runFridge(String[] args) throws IOException, ParseException {
         // Creates class instances
         intake = new Intake();
         db = new Database();
