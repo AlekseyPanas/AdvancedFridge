@@ -1,3 +1,4 @@
+import com.google.zxing.NotFoundException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 import org.opencv.core.Core;
@@ -6,28 +7,34 @@ import org.opencv.videoio.VideoCapture;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 
 public class Camera {
     // Creates manager for OpenCV operations
     private final VideoCapture capture;
     private final Mat matrix;
+    private String id;
 
     public Camera() {
         // Loading the OpenCV core library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         capture = new VideoCapture(0);
         matrix = new Mat();
+        id = null;
     }
 
-    public WritableImage next() {
+    public WritableImage next() throws NotFoundException {
         capture.read(matrix);
         if (capture.isOpened()) {
             if (capture.read(matrix)) {
                 BufferedImage image = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
-                WritableRaster raster = image.getRaster();
-                DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
+                DataBufferByte dataBuffer = (DataBufferByte) image.getRaster().getDataBuffer();
                 matrix.get(0, 0, dataBuffer.getData());
+                try {
+                    id = VisionManager.decode(image);
+                } catch (NotFoundException e) {
+                    id = null;
+                }
+                System.out.println(id);
                 return SwingFXUtils.toFXImage(image, null);
             }
         }
