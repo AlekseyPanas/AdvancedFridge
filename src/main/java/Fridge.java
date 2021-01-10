@@ -3,10 +3,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Fridge extends Application {
     // Creates Subclass objects
@@ -16,22 +12,21 @@ public class Fridge extends Application {
     private StorageManager store;
 
     // Constructor
-    public Fridge() {
-    }
+    public Fridge() {}
 
     // Startup method for fridge
-    public void runFridge(String[] args) throws IOException, ParseException {
-        // Creates class instances
-        intake = new Intake();
-        db = new Database();
-        store = new StorageManager();
-
+    public void runFridge(String[] args) {
         // Launches JavaFX
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+        // Creates class instances
+        db = new Database();
+        intake = new Intake();
+        store = new StorageManager();
+
         Parent root = FXMLLoader.load(getClass().getResource("main_scene.fxml"));
 
         // Saves fridge contents upon closing
