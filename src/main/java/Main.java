@@ -1,9 +1,7 @@
-import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
+import java.util.Set;
 
 public class Main {
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws InterruptedException {
         // Creates main fridge object and runs it
         Fridge fridge = new Fridge();
         fridge.runFridge(args);
@@ -12,5 +10,13 @@ public class Main {
 
         // Intake intake = new Intake();
         // intake.doLaunch(args);
+
+        // Uncomment for thread debugging
+        /*Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+
+        while (threadSet.size() > 1) {
+            System.out.println(threadSet);
+            Thread.sleep(1000);
+        }*/
     }
 }

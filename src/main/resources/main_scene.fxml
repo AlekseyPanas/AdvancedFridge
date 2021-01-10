@@ -12,8 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fridge">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;);" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fridge">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="747.0">
          <children>
@@ -43,32 +42,36 @@
          <children>
             <Pane prefHeight="417.0" prefWidth="350.0" style="-fx-padding: 10px;">
                <children>
-                  <VBox alignment="TOP_CENTER" layoutX="46.0" layoutY="28.0" prefHeight="362.0" prefWidth="259.0" style="-fx-background-radius: 20px; -fx-background-color: rgba(255, 255, 255, 0.7); -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 5, 5); -fx-padding: 10px;">
+                  <VBox fx:id="expireContainer" alignment="TOP_CENTER" layoutX="46.0" layoutY="28.0" prefHeight="362.0" prefWidth="259.0" style="-fx-background-radius: 20px; -fx-background-color: rgba(255, 255, 255, 0.7); -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 5, 5); -fx-padding: 10px;">
                      <children>
                         <Text fill="#720000" stroke="#540000" strokeType="OUTSIDE" strokeWidth="0.0" text="Soon to Expire!!" textAlignment="CENTER" wrappingWidth="203.70703125">
                            <font>
                               <Font name="Impact" size="22.0" />
                            </font>
                         </Text>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="239.0">
+
+
+                        <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="239.0" styleClass="exItemContainer">
                            <children>
-                              <Label prefHeight="25.0" prefWidth="130.0" text="Product 1">
+                              <Label prefHeight="25.0" prefWidth="130.0" styleClass="exTitle" text="Product 1">
                                  <font>
                                     <Font name="David" size="20.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="25.0" prefWidth="45.0" text="(0d)" textFill="#f50303">
+                              <Label prefHeight="25.0" prefWidth="45.0" styleClass="exExpire" text="(0d)" textFill="#f50303">
                                  <font>
                                     <Font name="David" size="20.0" />
                                  </font>
                               </Label>
-                              <Button mnemonicParsing="false" style="-fx-background-color: linear-gradient(#0fb300, #0c9100); -fx-background-radius: 8,7,6; -fx-background-insets: 0,1,2; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );" text="Take" textFill="WHITE" textOverrun="CLIP">
+                              <Button mnemonicParsing="false" styleClass="takeButton" text="Take" textFill="WHITE" textOverrun="CLIP">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
                            </children>
                         </HBox>
+
+
                      </children>
                   </VBox>
                </children>
@@ -82,24 +85,28 @@
                               <Font name="Impact" size="20.0" />
                            </font>
                         </Label>
-                        <TextField promptText="Search" />
-                        <ScrollPane prefHeight="287.0" prefWidth="239.0">
+                        <TextField onKeyTyped="#searchFunction" promptText="Search" />
+                        <ScrollPane fx:id="allProductsContainer" prefHeight="287.0" prefWidth="239.0">
                            <content>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="220.0">
+
+
+                              <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="220.0" styleClass="pdItemContainer">
                                  <children>
-                                    <Label prefHeight="27.0" prefWidth="113.0" text="Product 1">
+                                    <Label prefHeight="27.0" prefWidth="113.0" styleClass="pdTitle" text="Product 1">
                                        <font>
                                           <Font name="David" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label prefHeight="17.0" prefWidth="54.0" text="(0d)" />
-                                    <Button mnemonicParsing="false" style="-fx-background-color: linear-gradient(#0fb300, #0c9100); -fx-background-radius: 8,7,6; -fx-background-insets: 0,1,2; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );" text="Take" textFill="WHITE" textOverrun="CLIP">
+                                    <Label prefHeight="17.0" prefWidth="54.0" styleClass="pdExpire" text="(0d)" />
+                                    <Button mnemonicParsing="false" styleClass="takeButton" text="Take" textFill="WHITE" textOverrun="CLIP">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Button>
                                  </children>
                               </HBox>
+
+
                            </content>
                         </ScrollPane>
                      </children>

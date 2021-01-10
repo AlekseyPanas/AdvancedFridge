@@ -1,0 +1,27 @@
+.exItemContainer {
+    -fx-pref-height: 34.0px;
+    -fx-pref-width: 239.0px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.exTitle {
+    -fx-pref-height: 25.0px;
+    -fx-pref-width: 130.0px;
+}
+
+.exExpire {
+    -fx-pref-height: 25.0px;
+    -fx-pref-width: 45.0px;
+    -fx-text-fill: #f50303;
+}
+
+.takeButton {
+    -fx-pref-height: 25.0px;
+    -fx-pref-width: 45.0px;
+    -fx-text-fill: WHITE;
+    -fx-text-overrun: CLIP;
+    -fx-background-color: linear-gradient(#0fb300, #0c9100);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
