@@ -9,11 +9,13 @@ public class Fridge extends Application {
     // ------------------------
     private Intake intake;
     private Database db;
+    private StorageManager store;
 
     // Constructor
     public Fridge() {
-        Intake intake = new Intake();
-        Database db = new Database();
+        intake = new Intake();
+        db = new Database();
+        store = new StorageManager();
     }
 
     // Main method for fridge
