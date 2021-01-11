@@ -15,19 +15,19 @@ would be controller
 ### Development Progress
 
 - [ ] Camera Sensor:  
-  ![50%](https://progress-bar.dev/0)
+  ![50%](https://progress-bar.dev/95)
 
 - [ ] Scale Sensor:  
   ![50%](https://progress-bar.dev/0)
 
 - [ ] Intake:  
-  ![50%](https://progress-bar.dev/0)
+  ![50%](https://progress-bar.dev/15)
 
 - [ ] JavaFX Dashboard:  
-  ![50%](https://progress-bar.dev/0)
+  ![50%](https://progress-bar.dev/45)
 
 - [ ] Overall:  
-  ![50%](https://progress-bar.dev/1)
+  ![50%](https://progress-bar.dev/60)
 
 ### Planned Features
 Additional features in mind:
