@@ -30,10 +30,34 @@ public class Fridge extends Application {
     public void searchFunction () {
         System.out.println("hello");
 
-        expireContainer.getChildren().add(createExpireNode("Test1", LocalDate.now()));
+        expireContainer.getChildren().add(createListItemNode("Test1", LocalDate.now()));
     }
 
     // ======================================
+
+
+    private Node createListItemNode (String productName, LocalDate expireDate) {
+        HBox mainContainer = new HBox();
+        mainContainer.getStyleClass().add("exItemContainer");
+
+        Font davidFont = new Font("David", 20.0);
+        Font systemFont = new Font("System Bold", 12.0);
+
+        Label prodTitle = new Label(productName);
+        prodTitle.getStyleClass().add("exTitle");
+        prodTitle.setFont(davidFont);
+
+        Label prodExpire = new Label("(0d)");
+
+        Button takeButton = new Button();
+        takeButton.getStyleClass().add("takeButton");
+        takeButton.setFont(systemFont);
+        takeButton.setText("Take");
+
+        mainContainer.getChildren().addAll(prodTitle, prodExpire, takeButton);
+
+        return mainContainer;
+    }
 
     // Returns a populated HBox element row
     private Node createExpireNode (String productName, LocalDate expireDate) {
@@ -47,7 +71,7 @@ public class Fridge extends Application {
         prodTitle.getStyleClass().add("exTitle");
         prodTitle.setFont(davidFont);
 
-        Label prodExpire = new Label("0d");
+        Label prodExpire = new Label("(0d)");
         prodExpire.getStyleClass().add("exExpire");
         prodExpire.setFont(davidFont);
 
