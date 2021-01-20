@@ -6,8 +6,8 @@ public class Main {
         Fridge fridge = new Fridge();
         fridge.runFridge(args);
 
-        // Intake intake = new Intake();
-        // intake.doLaunch(args);
+        //Intake intake = new Intake();
+        //intake.doLaunch(args);
 
         // Uncomment for thread debugging
         /*Set<Thread> threadSet = Thread.getAllStackTraces().keySet();

@@ -41,4 +41,8 @@ public class Camera {
         }
         return null;
     }
+
+    public void releaseCapture () {
+        capture.release();
+    }
 }

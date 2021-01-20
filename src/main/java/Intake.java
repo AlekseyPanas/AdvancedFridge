@@ -1,9 +1,11 @@
 import com.google.zxing.NotFoundException;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -26,6 +28,19 @@ public class Intake extends Application {
         // Setting the image view
         ImageView imageView = new ImageView(rCamera.next());
 
+        // Creates timeline to update camera feed
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(.1), e -> {
+                    try {
+                        imageView.setImage(rCamera.next());
+                    } catch (NotFoundException notFoundException) {
+                        notFoundException.printStackTrace();
+                    }
+                })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
         // setting the fit height and width of the image view
         imageView.setFitHeight(400);
         imageView.setFitWidth(600);
@@ -44,6 +59,8 @@ public class Intake extends Application {
 
         // Adding scene to the stage
         stage.setScene(scene);
+
+        stage.setOnCloseRequest(e -> {rCamera.releaseCapture();});
 
         // Displaying the contents of the stage
         stage.show();
