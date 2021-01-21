@@ -1,3 +1,6 @@
+import com.google.zxing.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -9,9 +12,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.*;
+
+import static java.lang.Math.*;
 
 public class Fridge extends Application {
     // Creates Subclass objects
@@ -32,47 +38,66 @@ public class Fridge extends Application {
 
     // Search field event
     public void searchFunction () {
-        System.out.println("hello");
-        // Clears container
-        allProductsContainer.getChildren().clear();
-
-        // Retrieves storage
-        LocalDate[] dates = store.getDates();
-        int[] ids = store.getIds();
-
-        for (int i = 0; i < ids.length; i++) {
-            // Gets product from ID
-            Product prod = db.getItemFromID(ids[i]);
-            // Adds entry with product name and calculated time to expiration
-            allProductsContainer.getChildren().add(createListItemNode(prod.product_name,
-                    getDateDifference(dates[i])));
-        }
-
+        populateProductList(searchBar.getText());
     }
 
     // ======================================
 
-    // TODO -- Make function return difference in dates
-    // Gets the date different between now and desired date
-    private LocalDate getDateDifference (LocalDate date) {
-        LocalDate now = LocalDate.now();
-        return now;
+    // Populates product list
+    private void populateProductList (String searchString) {
+        // Clears container
+        allProductsContainer.getChildren().clear();
+
+        // Retrieves storage
+        ActualProduct[] actualProducts = searchString.equals("") ? store.getActualProducts():
+                store.getSearchedActualProducts(searchString);
+
+        for (ActualProduct prod: actualProducts) {
+            // Adds entry with product
+            allProductsContainer.getChildren().add(createListItemNode(prod));
+            //expireContainer.getChildren().add(createExpireNode(prod));
+        }
     }
 
-    // TODO -- Fix Expiration dates
-    private Node createListItemNode (String productName, LocalDate expireDate) {
+    private void populateExpireList () {
+        // Clears container
+        System.out.println(expireContainer.getChildren());
+        expireContainer.getChildren().clear();
+
+        // Retrieves expiring products
+        ActualProduct[] expiringProducts = store.getExpiringProducts(Constants.MAX_DAYS_UNTIL_EXPIRE);
+        System.out.println(expiringProducts.length);
+
+        for (ActualProduct prod: expiringProducts) {
+            System.out.println(prod);
+            // Adds entry with product
+            expireContainer.getChildren().add(createExpireNode(prod));
+        }
+    }
+
+    // Gets the hour difference between now and desired date
+    public static int getDateDifference (LocalDate date) {
+        LocalDate now = LocalDate.now();
+        return Period.between(now, date).getDays() * 24;
+    }
+
+    // Gets Product Node
+    private Node createListItemNode (ActualProduct product) {
+        int timeToExpire = getDateDifference(product.expiration);
+        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)"): ("(" + timeToExpire + "h)");
+
         HBox mainContainer = new HBox();
         mainContainer.getStyleClass().add("exItemContainer");
 
-        Font davidFont = new Font("David", 20.0);
+        Font davidFont = new Font("David", 15.0);
         Font systemFont = new Font("System Bold", 12.0);
 
-        Label prodTitle = new Label(productName);
-        prodTitle.getStyleClass().add("exTitle");
+        Label prodTitle = new Label(product.product_name);
+        prodTitle.getStyleClass().add("pdTitle");
         prodTitle.setFont(davidFont);
 
-        Label prodExpire = new Label("(0d)");
-        prodExpire.setPrefWidth(34.0);
+        Label prodExpire = new Label(expireMessage);
+        prodExpire.getStyleClass().add("pdTitle");
         prodExpire.setTextAlignment(TextAlignment.CENTER);
 
         Button takeButton = new Button();
@@ -82,23 +107,40 @@ public class Fridge extends Application {
 
         mainContainer.getChildren().addAll(prodTitle, prodExpire, takeButton);
 
+        mainContainer.getStyleClass().add(product.ID + "." + product.expiration.toString());
+
         return mainContainer;
     }
 
     // Returns a populated HBox element row
-    private Node createExpireNode (String productName, LocalDate expireDate) {
+    private Node createExpireNode (ActualProduct product) {
+        int timeToExpire = getDateDifference(product.expiration);
+        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)"): ("(" + timeToExpire + "h)");
+
+        String color;
+        if (timeToExpire < 3) {
+            color = "red";
+        } else if (timeToExpire < 7) {
+            color = "orange";
+        } else if (timeToExpire < 11) {
+            color = "yellow";
+        } else {
+            color = "green";
+        }
+
         HBox mainContainer = new HBox();
         mainContainer.getStyleClass().add("exItemContainer");
 
-        Font davidFont = new Font("David", 20.0);
+        Font davidFont = new Font("David", 15.0);
         Font systemFont = new Font("System Bold", 12.0);
 
-        Label prodTitle = new Label(productName);
+        Label prodTitle = new Label(product.product_name);
         prodTitle.getStyleClass().add("exTitle");
         prodTitle.setFont(davidFont);
 
-        Label prodExpire = new Label("(0d)");
+        Label prodExpire = new Label(expireMessage);
         prodExpire.getStyleClass().add("exExpire");
+        prodExpire.setStyle("-fx-text-fill: " + color);
         prodExpire.setFont(davidFont);
 
         Button takeButton = new Button();
@@ -107,6 +149,8 @@ public class Fridge extends Application {
         takeButton.setText("Take");
 
         mainContainer.getChildren().addAll(prodTitle, prodExpire, takeButton);
+
+        mainContainer.getStyleClass().add(product.ID + "." + product.expiration.toString());
 
         return mainContainer;
     }
@@ -141,7 +185,23 @@ public class Fridge extends Application {
             store.saveStorage();
         });
 
+        // Sets timeline to update expiration list
+        // TODO; Fix timeline. Function runs but products not added
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> {
+                    populateExpireList();
+                })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        // Starts stage
         stage.setScene(new Scene(root, 700, 700));
         stage.show();
+    }
+
+    public void initialize() {
+        // Populates products
+        populateProductList("");
     }
 }

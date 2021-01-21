@@ -4,15 +4,12 @@
     -fx-alignment: CENTER_RIGHT;
 }
 
-.exTitle {
+.exTitle, .pdTitle {
     -fx-pref-height: 25.0px;
-    -fx-pref-width: 130.0px;
 }
 
-.exExpire {
+.exExpire .pdExpire {
     -fx-pref-height: 25.0px;
-    -fx-pref-width: 45.0px;
-    -fx-text-fill: #f50303;
 }
 
 .takeButton {
