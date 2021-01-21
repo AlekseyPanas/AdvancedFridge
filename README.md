@@ -24,10 +24,10 @@ would be controller
   ![50%](https://progress-bar.dev/20)
 
 - [ ] JavaFX Dashboard:  
-  ![50%](https://progress-bar.dev/50)
+  ![50%](https://progress-bar.dev/75)
 
 - [ ] Overall:  
-  ![50%](https://progress-bar.dev/65)
+  ![50%](https://progress-bar.dev/70)
 
 ### Planned Features
 Additional features in mind:
