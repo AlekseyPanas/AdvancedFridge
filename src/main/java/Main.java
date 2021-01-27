@@ -6,15 +6,11 @@ public class Main {
         Fridge fridge = new Fridge();
         fridge.runFridge(args);
 
-        //Intake intake = new Intake();
-        //intake.doLaunch(args);
-
         // Uncomment for thread debugging
-        /*Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-
-        while (threadSet.size() > 1) {
-            System.out.println(threadSet);
-            Thread.sleep(1000);
-        }*/
+        // Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        // while (threadSet.size() > 1) {
+        //     System.out.println(threadSet);
+        //     Thread.sleep(1000);
+        // }
     }
 }

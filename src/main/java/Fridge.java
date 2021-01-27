@@ -3,21 +3,25 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 
 public class Fridge extends Application {
     // Creates Subclass objects
@@ -25,41 +29,49 @@ public class Fridge extends Application {
     //private Intake intake;
     public static Database db;
     public static StorageManager store;
-
+    private final Intake intake;
     public VBox expireContainer;
     public VBox allProductsContainer;
     public TextField searchBar;
 
     // Constructor
-    public Fridge() {}
+    public Fridge() {
+        intake = new Intake();
+    }
 
     // EVENT HANDLERS
     // ======================================
 
-    // Search field event
-    public void searchFunction () {
-        populateProductList(searchBar.getText());
+    // Gets the hour difference between now and desired date
+    public static int getDateDifference(LocalDate date) {
+        LocalDate now = LocalDate.now();
+        return Period.between(now, date).getDays() * 24;
     }
 
     // ======================================
 
+    // Search field event
+    public void searchFunction() {
+        populateProductList(searchBar.getText());
+    }
+
     // Populates product list
-    private void populateProductList (String searchString) {
+    private void populateProductList(String searchString) {
         // Clears container
         allProductsContainer.getChildren().clear();
 
         // Retrieves storage
-        ActualProduct[] actualProducts = searchString.equals("") ? store.getActualProducts():
+        ActualProduct[] actualProducts = searchString.equals("") ? store.getActualProducts() :
                 store.getSearchedActualProducts(searchString);
 
-        for (ActualProduct prod: actualProducts) {
+        for (ActualProduct prod : actualProducts) {
             // Adds entry with product
             allProductsContainer.getChildren().add(createListItemNode(prod));
             //expireContainer.getChildren().add(createExpireNode(prod));
         }
     }
 
-    private void populateExpireList () {
+    private void populateExpireList() {
         // Clears container
         System.out.println(expireContainer.getChildren());
         expireContainer.getChildren().clear();
@@ -68,23 +80,17 @@ public class Fridge extends Application {
         ActualProduct[] expiringProducts = store.getExpiringProducts(Constants.MAX_DAYS_UNTIL_EXPIRE);
         System.out.println(expiringProducts.length);
 
-        for (ActualProduct prod: expiringProducts) {
+        for (ActualProduct prod : expiringProducts) {
             System.out.println(prod);
             // Adds entry with product
             expireContainer.getChildren().add(createExpireNode(prod));
         }
     }
 
-    // Gets the hour difference between now and desired date
-    public static int getDateDifference (LocalDate date) {
-        LocalDate now = LocalDate.now();
-        return Period.between(now, date).getDays() * 24;
-    }
-
     // Gets Product Node
-    private Node createListItemNode (ActualProduct product) {
+    private Node createListItemNode(ActualProduct product) {
         int timeToExpire = getDateDifference(product.expiration);
-        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)"): ("(" + timeToExpire + "h)");
+        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)") : ("(" + timeToExpire + "h)");
 
         HBox mainContainer = new HBox();
         mainContainer.getStyleClass().add("exItemContainer");
@@ -113,9 +119,9 @@ public class Fridge extends Application {
     }
 
     // Returns a populated HBox element row
-    private Node createExpireNode (ActualProduct product) {
+    private Node createExpireNode(ActualProduct product) {
         int timeToExpire = getDateDifference(product.expiration);
-        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)"): ("(" + timeToExpire + "h)");
+        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)") : ("(" + timeToExpire + "h)");
 
         String color;
         if (timeToExpire < 3) {
@@ -185,18 +191,39 @@ public class Fridge extends Application {
             store.saveStorage();
         });
 
+        // TODO Fix timeline. Function runs but products not added
         // Sets timeline to update expiration list
-        // TODO; Fix timeline. Function runs but products not added
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(5), e -> {
-                    populateExpireList();
-                })
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        // Timeline timeline = new Timeline(
+        //         new KeyFrame(Duration.seconds(5), e -> {
+        //             populateExpireList();
+        //         })
+        // );
+        // timeline.setCycleCount(Timeline.INDEFINITE);
+        // timeline.play();
 
         // Starts stage
-        stage.setScene(new Scene(root, 700, 700));
+        Scene main_scene = new Scene(root, 700, 700);
+        stage.setScene(main_scene);
+
+        main_scene.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                stage.setOnCloseRequest(event -> {
+                    intake.getCamera().releaseCapture();
+                });
+                try {
+                    Scene scene = intake.getScene();
+                    stage.setScene(scene);
+                    scene.setOnKeyReleased(event -> {
+                        if (e.getCode().equals(KeyCode.ENTER)) {
+                            stage.setScene(main_scene);
+                        }
+                    });
+                } catch (NotFoundException notFoundException) {
+                    notFoundException.printStackTrace();
+                }
+            }
+        });
+
         stage.show();
     }
 
