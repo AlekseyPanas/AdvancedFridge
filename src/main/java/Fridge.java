@@ -26,17 +26,16 @@ import static java.lang.Math.abs;
 public class Fridge extends Application {
     // Creates Subclass objects
     // ------------------------
-    //private Intake intake;
+    private Intake intake;
     public static Database db;
     public static StorageManager store;
-    private final Intake intake;
+
     public VBox expireContainer;
     public VBox allProductsContainer;
     public TextField searchBar;
 
     // Constructor
     public Fridge() {
-        intake = new Intake();
     }
 
     // EVENT HANDLERS
@@ -171,7 +170,7 @@ public class Fridge extends Application {
     public void start(Stage stage) throws Exception {
         // Creates class instances
         db = new Database();
-        //intake = new Intake();
+        intake = new Intake();
         store = new StorageManager();
 
         // Initializes pointers
@@ -202,7 +201,7 @@ public class Fridge extends Application {
         // timeline.play();
 
         // Starts stage
-        Scene main_scene = new Scene(root, 700, 700);
+        Scene main_scene = new Scene(root, Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
         stage.setScene(main_scene);
 
         main_scene.setOnKeyPressed(e -> {
