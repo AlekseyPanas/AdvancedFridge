@@ -20,36 +20,6 @@ public class Intake {
         return rCamera;
     }
 
-    public Scene getScene() throws NotFoundException {
-        ImageView imageView = new ImageView(rCamera.next());
-
-        // Creates timeline to update camera feed
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(.1), e -> {
-                    try {
-                        imageView.setImage(rCamera.next());
-                    } catch (NotFoundException notFoundException) {
-                        notFoundException.printStackTrace();
-                    }
-                })
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-
-        // setting the fit height and width of the image view
-        imageView.setFitHeight(400);
-        imageView.setFitWidth(600);
-
-        // Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
-
-        // Creating a Group object
-        Group root = new Group(imageView);
-
-        // Creating a Scene object
-        return new Scene(root, 600, 400);
-    }
-
     // public void doLaunch(String[] args) {
     //     launch(args);
     // }

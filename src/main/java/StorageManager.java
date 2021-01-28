@@ -23,6 +23,7 @@ public class StorageManager {
             dateList.add(LocalDate.parse((String) item.get("expire"), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         }
 
+
         actualProducts = new ActualProduct[idList.size()];
 
         for (int i = 0; i < idList.size(); i++) {
@@ -44,7 +45,7 @@ public class StorageManager {
         int idxTracker = 0;
         for (int i = 0; i < actualProducts.length; i++) {
             // Adds indexes of products that are within expiration range to list
-            if (Fridge.getDateDifference(actualProducts[i].expiration) <= maxDaysUntilExpire) {
+            if (GUIutils.getDateDifference(actualProducts[i].expiration) <= maxDaysUntilExpire) {
                 productIndexes[idxTracker] = i;
                 idxTracker++;
             }
@@ -120,6 +121,7 @@ public class StorageManager {
         return matchedItems;
     }
 
+    // Add new item to storage array
     public void add(int id, LocalDate date) {
         ActualProduct[] prodArr = new ActualProduct[actualProducts.length + 1];
 
@@ -129,6 +131,34 @@ public class StorageManager {
         prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name, date);
 
         actualProducts = prodArr;
+    }
+
+    // Remove item from storage array
+    public void remove(int id, LocalDate date) {
+        ActualProduct[] new_prods = new ActualProduct[actualProducts.length - 1];
+
+        int idx = 0;
+        boolean found_item = false;
+
+        System.out.println(id);
+        System.out.println(date);
+        System.out.println("---");
+
+        for (int i = 0; i < actualProducts.length; i++) {
+            System.out.println(actualProducts[i].ID);
+            System.out.println(actualProducts[i].expiration);
+            System.out.println(date.toString().equals(actualProducts[i].expiration.toString()));
+            if (!(actualProducts[i].ID == id && date.toString().equals(actualProducts[i].expiration.toString())) || found_item) {
+                new_prods[idx] = actualProducts[i];
+                idx++;
+            } else {
+                found_item = true;
+                System.out.println("HEY");
+            }
+        }
+
+        actualProducts = new_prods;
+        for (ActualProduct prod: actualProducts) {System.out.println(prod);}
     }
 
     public void saveStorage() {

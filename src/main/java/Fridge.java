@@ -3,12 +3,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,6 +24,7 @@ import java.time.LocalDate;
 import java.time.Period;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.exp;
 
 public class Fridge extends Application {
     // Creates Subclass objects
@@ -30,9 +33,18 @@ public class Fridge extends Application {
     public static Database db;
     public static StorageManager store;
 
+    // FXML element pointers
     public VBox expireContainer;
     public VBox allProductsContainer;
     public TextField searchBar;
+
+    // Scenes
+    private Scene main_scene;
+    private Scene intake_menu;
+
+    // Timelines
+    private Timeline cameraTimer;
+    private Timeline expireTimer;
 
     // Constructor
     public Fridge() {
@@ -41,21 +53,25 @@ public class Fridge extends Application {
     // EVENT HANDLERS
     // ======================================
 
-    // Gets the hour difference between now and desired date
-    public static int getDateDifference(LocalDate date) {
-        LocalDate now = LocalDate.now();
-        return Period.between(now, date).getDays() * 24;
-    }
-
-    // ======================================
-
     // Search field event
     public void searchFunction() {
         populateProductList(searchBar.getText());
     }
 
+    // ======================================
+
+    //
+    public void runTakeButton(String[] id_and_date) {
+        String[] splitDate = id_and_date[1].split("-");
+        LocalDate expireDate = LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]));
+
+        store.remove(Integer.parseInt(id_and_date[0]), expireDate);
+        populateProductList(searchBar.getText());
+        populateExpireList();
+    }
+
     // Populates product list
-    private void populateProductList(String searchString) {
+    public void populateProductList(String searchString) {
         // Clears container
         allProductsContainer.getChildren().clear();
 
@@ -65,99 +81,52 @@ public class Fridge extends Application {
 
         for (ActualProduct prod : actualProducts) {
             // Adds entry with product
-            allProductsContainer.getChildren().add(createListItemNode(prod));
+            allProductsContainer.getChildren().add(GUIutils.createListItemNode(prod));
             //expireContainer.getChildren().add(createExpireNode(prod));
         }
     }
 
-    private void populateExpireList() {
+    // Populates expire widget
+    public void populateExpireList() {
         // Clears container
-        System.out.println(expireContainer.getChildren());
         expireContainer.getChildren().clear();
 
         // Retrieves expiring products
         ActualProduct[] expiringProducts = store.getExpiringProducts(Constants.MAX_DAYS_UNTIL_EXPIRE);
-        System.out.println(expiringProducts.length);
 
         for (ActualProduct prod : expiringProducts) {
-            System.out.println(prod);
             // Adds entry with product
-            expireContainer.getChildren().add(createExpireNode(prod));
+            expireContainer.getChildren().add(GUIutils.createExpireNode(prod));
         }
     }
 
-    // Gets Product Node
-    private Node createListItemNode(ActualProduct product) {
-        int timeToExpire = getDateDifference(product.expiration);
-        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)") : ("(" + timeToExpire + "h)");
+    public Scene TEMPgetscene() throws NotFoundException {
+        ImageView imageView = new ImageView(intake.getCamera().next());
 
-        HBox mainContainer = new HBox();
-        mainContainer.getStyleClass().add("exItemContainer");
+        // Creates timeline to update camera feed
+        cameraTimer = new Timeline(
+                new KeyFrame(Duration.seconds(.1), e -> {
+                    try {
+                        imageView.setImage(intake.getCamera().next());
+                    } catch (NotFoundException notFoundException) {
+                        notFoundException.printStackTrace();
+                    }
+                })
+        );
+        cameraTimer.setCycleCount(Timeline.INDEFINITE);
 
-        Font davidFont = new Font("David", 15.0);
-        Font systemFont = new Font("System Bold", 12.0);
+        // setting the fit height and width of the image view
+        imageView.setFitHeight(Constants.SCENE_HEIGHT);
+        imageView.setFitWidth(Constants.SCENE_WIDTH);
 
-        Label prodTitle = new Label(product.product_name);
-        prodTitle.getStyleClass().add("pdTitle");
-        prodTitle.setFont(davidFont);
+        // Setting the preserve ratio of the image view
+        imageView.setPreserveRatio(true);
 
-        Label prodExpire = new Label(expireMessage);
-        prodExpire.getStyleClass().add("pdTitle");
-        prodExpire.setTextAlignment(TextAlignment.CENTER);
+        // Creating a Group object
+        Group root = new Group(imageView);
 
-        Button takeButton = new Button();
-        takeButton.getStyleClass().add("takeButton");
-        takeButton.setFont(systemFont);
-        takeButton.setText("Take");
-
-        mainContainer.getChildren().addAll(prodTitle, prodExpire, takeButton);
-
-        mainContainer.getStyleClass().add(product.ID + "." + product.expiration.toString());
-
-        return mainContainer;
-    }
-
-    // Returns a populated HBox element row
-    private Node createExpireNode(ActualProduct product) {
-        int timeToExpire = getDateDifference(product.expiration);
-        String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)") : ("(" + timeToExpire + "h)");
-
-        String color;
-        if (timeToExpire < 3) {
-            color = "red";
-        } else if (timeToExpire < 7) {
-            color = "orange";
-        } else if (timeToExpire < 11) {
-            color = "yellow";
-        } else {
-            color = "green";
-        }
-
-        HBox mainContainer = new HBox();
-        mainContainer.getStyleClass().add("exItemContainer");
-
-        Font davidFont = new Font("David", 15.0);
-        Font systemFont = new Font("System Bold", 12.0);
-
-        Label prodTitle = new Label(product.product_name);
-        prodTitle.getStyleClass().add("exTitle");
-        prodTitle.setFont(davidFont);
-
-        Label prodExpire = new Label(expireMessage);
-        prodExpire.getStyleClass().add("exExpire");
-        prodExpire.setStyle("-fx-text-fill: " + color);
-        prodExpire.setFont(davidFont);
-
-        Button takeButton = new Button();
-        takeButton.getStyleClass().add("takeButton");
-        takeButton.setFont(systemFont);
-        takeButton.setText("Take");
-
-        mainContainer.getChildren().addAll(prodTitle, prodExpire, takeButton);
-
-        mainContainer.getStyleClass().add(product.ID + "." + product.expiration.toString());
-
-        return mainContainer;
+        // Creating a Scene object
+        return new Scene(root, Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
     }
 
     // Startup method for fridge
@@ -173,11 +142,6 @@ public class Fridge extends Application {
         intake = new Intake();
         store = new StorageManager();
 
-        // Initializes pointers
-        expireContainer = new VBox();
-        allProductsContainer = new VBox();
-        searchBar = new TextField();
-
         Parent root = FXMLLoader.load(getClass().getResource("main_scene.fxml"));
 
         // Saves fridge contents upon closing and closes DB
@@ -188,38 +152,28 @@ public class Fridge extends Application {
                 throwables.printStackTrace();
             }
             store.saveStorage();
+            intake.getCamera().releaseCapture();
         });
 
-        // TODO Fix timeline. Function runs but products not added
-        // Sets timeline to update expiration list
-        // Timeline timeline = new Timeline(
-        //         new KeyFrame(Duration.seconds(5), e -> {
-        //             populateExpireList();
-        //         })
-        // );
-        // timeline.setCycleCount(Timeline.INDEFINITE);
-        // timeline.play();
+        // Creates scenes
+        main_scene = new Scene(root, Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+        intake_menu = TEMPgetscene();
 
-        // Starts stage
-        Scene main_scene = new Scene(root, Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
         stage.setScene(main_scene);
+
+        intake_menu.setOnKeyReleased(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                stage.setScene(main_scene);
+                cameraTimer.stop();
+                expireTimer.play();
+            }
+        });
 
         main_scene.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.ENTER)) {
-                stage.setOnCloseRequest(event -> {
-                    intake.getCamera().releaseCapture();
-                });
-                try {
-                    Scene scene = intake.getScene();
-                    stage.setScene(scene);
-                    scene.setOnKeyReleased(event -> {
-                        if (e.getCode().equals(KeyCode.ENTER)) {
-                            stage.setScene(main_scene);
-                        }
-                    });
-                } catch (NotFoundException notFoundException) {
-                    notFoundException.printStackTrace();
-                }
+                stage.setScene(intake_menu);
+                cameraTimer.play();
+                expireTimer.stop();
             }
         });
 
@@ -229,5 +183,20 @@ public class Fridge extends Application {
     public void initialize() {
         // Populates products
         populateProductList("");
+        populateExpireList();
+
+        // Sets timeline to update expiration list
+        expireTimer = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> {
+                    populateExpireList();
+                })
+        );
+        expireTimer.setCycleCount(Timeline.INDEFINITE);
+        expireTimer.play();
+
+        // Initializes pointers
+        expireContainer = new VBox();
+        allProductsContainer = new VBox();
+        searchBar = new TextField();
     }
 }

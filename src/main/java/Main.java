@@ -1,9 +1,11 @@
 import java.util.Set;
 
 public class Main {
+    public static Fridge fridge;
+
     public static void main(String[] args) throws InterruptedException {
         // Creates main fridge object and runs it
-        Fridge fridge = new Fridge();
+        fridge = new Fridge();
         fridge.runFridge(args);
 
         // Uncomment for thread debugging
