@@ -9,11 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.abs;
@@ -27,6 +27,7 @@ public class main_scene_controller implements Initializable {
 
     // Timelines
     private Timeline expireTimer;
+    private Timeline pingScaleTimer;
 
     // EVENT HANDLERS
     // ======================================
@@ -90,11 +91,21 @@ public class main_scene_controller implements Initializable {
         expireTimer = new Timeline(
                 new KeyFrame(Duration.seconds(5), e -> {
                     populateExpireList();
-                    System.out.println("HALLO");
                 })
         );
         expireTimer.setCycleCount(Timeline.INDEFINITE);
         expireTimer.play();
+
+        pingScaleTimer = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> {
+                    if (Fridge.intake.getScale().getWeight() > 0) {
+                        Stage stage = ((Stage) (searchBar.getScene().getWindow()));
+                        if (stage != null) stage.setScene(Fridge.intake_menu);
+                    }
+                })
+        );
+        pingScaleTimer.setCycleCount(Timeline.INDEFINITE);
+        pingScaleTimer.play();
     }
 
     // Gets new Product Node
