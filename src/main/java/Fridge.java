@@ -33,71 +33,15 @@ public class Fridge extends Application {
     public static Database db;
     public static StorageManager store;
 
-    // FXML element pointers
-    public VBox expireContainer;
-    public VBox allProductsContainer;
-    public TextField searchBar;
-
     // Scenes
     private Scene main_scene;
     private Scene intake_menu;
 
-    // Timelines
+    // MOVE TO INTAKE SCENE CONTROLLER
     private Timeline cameraTimer;
-    private Timeline expireTimer;
 
     // Constructor
     public Fridge() {
-    }
-
-    // EVENT HANDLERS
-    // ======================================
-
-    // Search field event
-    public void searchFunction() {
-        populateProductList(searchBar.getText());
-    }
-
-    // ======================================
-
-    //
-    public void runTakeButton(String[] id_and_date) {
-        String[] splitDate = id_and_date[1].split("-");
-        LocalDate expireDate = LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]));
-
-        store.remove(Integer.parseInt(id_and_date[0]), expireDate);
-        populateProductList(searchBar.getText());
-        populateExpireList();
-    }
-
-    // Populates product list
-    public void populateProductList(String searchString) {
-        // Clears container
-        allProductsContainer.getChildren().clear();
-
-        // Retrieves storage
-        ActualProduct[] actualProducts = searchString.equals("") ? store.getActualProducts() :
-                store.getSearchedActualProducts(searchString);
-
-        for (ActualProduct prod : actualProducts) {
-            // Adds entry with product
-            allProductsContainer.getChildren().add(GUIutils.createListItemNode(prod));
-            //expireContainer.getChildren().add(createExpireNode(prod));
-        }
-    }
-
-    // Populates expire widget
-    public void populateExpireList() {
-        // Clears container
-        expireContainer.getChildren().clear();
-
-        // Retrieves expiring products
-        ActualProduct[] expiringProducts = store.getExpiringProducts(Constants.MAX_DAYS_UNTIL_EXPIRE);
-
-        for (ActualProduct prod : expiringProducts) {
-            // Adds entry with product
-            expireContainer.getChildren().add(GUIutils.createExpireNode(prod));
-        }
     }
 
     public Scene TEMPgetscene() throws NotFoundException {
@@ -131,12 +75,16 @@ public class Fridge extends Application {
 
     // Startup method for fridge
     public void runFridge(String[] args) {
+        System.out.println("LAUNCH CALLED");
+
         // Launches JavaFX
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.out.println("START CALLED");
+
         // Creates class instances
         db = new Database();
         intake = new Intake();
@@ -165,7 +113,6 @@ public class Fridge extends Application {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 stage.setScene(main_scene);
                 cameraTimer.stop();
-                expireTimer.play();
             }
         });
 
@@ -173,30 +120,11 @@ public class Fridge extends Application {
             if (e.getCode().equals(KeyCode.ENTER)) {
                 stage.setScene(intake_menu);
                 cameraTimer.play();
-                expireTimer.stop();
             }
         });
 
         stage.show();
     }
 
-    public void initialize() {
-        // Populates products
-        populateProductList("");
-        populateExpireList();
-
-        // Sets timeline to update expiration list
-        expireTimer = new Timeline(
-                new KeyFrame(Duration.seconds(5), e -> {
-                    populateExpireList();
-                })
-        );
-        expireTimer.setCycleCount(Timeline.INDEFINITE);
-        expireTimer.play();
-
-        // Initializes pointers
-        expireContainer = new VBox();
-        allProductsContainer = new VBox();
-        searchBar = new TextField();
-    }
+    public void initialize() { }
 }

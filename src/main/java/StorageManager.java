@@ -7,12 +7,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class StorageManager {
     private ActualProduct[] actualProducts;
+
+    // Gets the hour difference between now and desired date
+    public static int getDateDifference(LocalDate date) {
+        LocalDate now = LocalDate.now();
+        return Period.between(now, date).getDays() * 24;
+    }
 
     public StorageManager() throws IOException, ParseException {
         ArrayList<Integer> idList = new ArrayList<>();
@@ -45,7 +52,7 @@ public class StorageManager {
         int idxTracker = 0;
         for (int i = 0; i < actualProducts.length; i++) {
             // Adds indexes of products that are within expiration range to list
-            if (GUIutils.getDateDifference(actualProducts[i].expiration) <= maxDaysUntilExpire) {
+            if (getDateDifference(actualProducts[i].expiration) <= maxDaysUntilExpire) {
                 productIndexes[idxTracker] = i;
                 idxTracker++;
             }
@@ -135,30 +142,26 @@ public class StorageManager {
 
     // Remove item from storage array
     public void remove(int id, LocalDate date) {
-        ActualProduct[] new_prods = new ActualProduct[actualProducts.length - 1];
+        if (actualProducts.length > 1) {
+            ActualProduct[] new_prods = new ActualProduct[actualProducts.length - 1];
 
-        int idx = 0;
-        boolean found_item = false;
+            int idx = 0;
+            boolean found_item = false;
 
-        System.out.println(id);
-        System.out.println(date);
-        System.out.println("---");
-
-        for (int i = 0; i < actualProducts.length; i++) {
-            System.out.println(actualProducts[i].ID);
-            System.out.println(actualProducts[i].expiration);
-            System.out.println(date.toString().equals(actualProducts[i].expiration.toString()));
-            if (!(actualProducts[i].ID == id && date.toString().equals(actualProducts[i].expiration.toString())) || found_item) {
-                new_prods[idx] = actualProducts[i];
-                idx++;
-            } else {
-                found_item = true;
-                System.out.println("HEY");
+            for (int i = 0; i < actualProducts.length; i++) {
+                if (!(actualProducts[i].ID == id && date.toString().equals(actualProducts[i].expiration.toString())) || found_item) {
+                    new_prods[idx] = actualProducts[i];
+                    idx++;
+                } else {
+                    found_item = true;
+                }
             }
-        }
 
-        actualProducts = new_prods;
-        for (ActualProduct prod: actualProducts) {System.out.println(prod);}
+            actualProducts = new_prods;
+            for (ActualProduct prod: actualProducts) {System.out.println(prod);}
+        } else {
+            actualProducts = new ActualProduct[0];
+        }
     }
 
     public void saveStorage() {
