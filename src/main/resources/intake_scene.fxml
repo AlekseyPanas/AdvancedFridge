@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #00bfff;"
-      xmlns="http://javafx.com/javafx/15.0.1" fx:controller="intake_scene_controller">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #00bfff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="intake_scene_controller">
     <children>
         <Label alignment="CENTER" prefHeight="200.0" prefWidth="800.0" text="Product Detected">
             <font>
-                <Font size="48.0"/>
+                <Font size="48.0" />
             </font>
         </Label>
         <HBox prefHeight="200.0" prefWidth="800.0">
             <children>
-                <Region prefHeight="200.0" prefWidth="200.0"/>
-                <Button mnemonicParsing="false" onAction="#StartScan" prefHeight="150.0" prefWidth="600.0"
-                        style="-fx-background-radius: 25;" text="Scan Barcode">
+                <Region prefHeight="200.0" prefWidth="200.0" />
+                <Button mnemonicParsing="false" onAction="#StartScan" prefHeight="150.0" prefWidth="600.0" style="-fx-background-radius: 25;" text="Scan Barcode">
                     <font>
-                        <Font size="36.0"/>
+                        <Font size="36.0" />
                     </font>
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Region prefHeight="200.0" prefWidth="200.0"/>
+                <Region prefHeight="200.0" prefWidth="200.0" />
             </children>
         </HBox>
         <HBox prefHeight="200.0" prefWidth="800.0">
             <children>
-                <Region prefHeight="200.0" prefWidth="200.0"/>
-                <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="600.0" style="-fx-background-radius: 25;"
-                        text="Enter Manually">
+                <Region prefHeight="200.0" prefWidth="200.0" />
+                <Button mnemonicParsing="false" onAction="#StartManual" prefHeight="150.0" prefWidth="600.0" style="-fx-background-radius: 25;" text="Enter Manually">
                     <font>
-                        <Font size="36.0"/>
+                        <Font size="36.0" />
                     </font>
                     <opaqueInsets>
-                        <Insets/>
+                        <Insets />
                     </opaqueInsets>
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Region prefHeight="200.0" prefWidth="200.0"/>
+                <Region prefHeight="200.0" prefWidth="200.0" />
             </children>
         </HBox>
     </children>

@@ -12,6 +12,10 @@ public class intake_scene_controller implements Initializable {
 
     }
 
+    public void StartManual(ActionEvent event) {
+        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.manual_scene);
+    }
+
     public void StartScan(ActionEvent event) {
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.scan_scene);
     }

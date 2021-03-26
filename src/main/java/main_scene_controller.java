@@ -99,7 +99,7 @@ public class main_scene_controller implements Initializable {
         pingScaleTimer = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     if (Fridge.intake.getScale().getWeight() > 0) {
-                        Stage stage = ((Stage) (searchBar.getScene().getWindow()));
+                        Stage stage = ((Stage) (Fridge.main_scene.getWindow()));
                         if (stage != null) stage.setScene(Fridge.intake_menu);
                     }
                 })

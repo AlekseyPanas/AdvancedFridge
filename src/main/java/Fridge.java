@@ -17,6 +17,7 @@ public class Fridge extends Application {
     public static Scene main_scene;
     public static Scene intake_menu;
     public static Scene scan_scene;
+    public static Scene manual_scene;
 
     // Constructor
     public Fridge() {
@@ -54,11 +55,12 @@ public class Fridge extends Application {
         main_scene = new Scene(FXMLLoader.load(getClass().getResource("main_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
         intake_menu = new Scene(FXMLLoader.load(getClass().getResource("intake_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
         scan_scene = new Scene(FXMLLoader.load(getClass().getResource("scan_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+        manual_scene = new Scene(FXMLLoader.load(getClass().getResource("manual_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
 
         stage.setScene(main_scene);
 
         main_scene.setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.ENTER)) {
+            if (e.getCode().equals(KeyCode.DELETE)) {
                 intake.getScale().setWeight(10);
             }
         });
