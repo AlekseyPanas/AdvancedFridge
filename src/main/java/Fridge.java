@@ -14,14 +14,23 @@ public class Fridge extends Application {
     public static StorageManager store;
 
     // Scenes
+    public static FXMLLoader main_scene_loader;
     public static Scene main_scene;
+
+    public static FXMLLoader intake_menu_loader;
     public static Scene intake_menu;
+
+    public static FXMLLoader scan_scene_loader;
     public static Scene scan_scene;
+
+    public static FXMLLoader manual_scene_loader;
     public static Scene manual_scene;
 
+    public static FXMLLoader confirm_scene_loader;
+    public static Scene confirm_scene;
+
     // Constructor
-    public Fridge() {
-    }
+    public Fridge() { }
 
     // Startup method for fridge
     public void runFridge(String[] args) {
@@ -51,11 +60,21 @@ public class Fridge extends Application {
             intake.getCamera().releaseCapture();
         });
 
-        // Creates scenes
-        main_scene = new Scene(FXMLLoader.load(getClass().getResource("main_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
-        intake_menu = new Scene(FXMLLoader.load(getClass().getResource("intake_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
-        scan_scene = new Scene(FXMLLoader.load(getClass().getResource("scan_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
-        manual_scene = new Scene(FXMLLoader.load(getClass().getResource("manual_scene.fxml")), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+        // Creates scenes and loaders
+        main_scene_loader = new FXMLLoader(getClass().getResource("main_scene.fxml"));
+        main_scene = new Scene(main_scene_loader.load(), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+
+        intake_menu_loader = new FXMLLoader(getClass().getResource("intake_scene.fxml"));
+        intake_menu = new Scene(intake_menu_loader.load(), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+
+        scan_scene_loader = new FXMLLoader(getClass().getResource("scan_scene.fxml"));
+        scan_scene = new Scene(scan_scene_loader.load(), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+
+        manual_scene_loader = new FXMLLoader(getClass().getResource("manual_scene.fxml"));
+        manual_scene = new Scene(manual_scene_loader.load(), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
+
+        confirm_scene_loader = new FXMLLoader(getClass().getResource("confirm_scene.fxml"));
+        confirm_scene = new Scene(confirm_scene_loader.load(), Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
 
         stage.setScene(main_scene);
 

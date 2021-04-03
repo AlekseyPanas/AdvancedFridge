@@ -1,4 +1,5 @@
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -13,6 +14,10 @@ public class intake_scene_controller implements Initializable {
     }
 
     public void StartManual(ActionEvent event) {
+        // Calls switch method in manual scene
+        ((manual_scene_controller) Fridge.manual_scene_loader.getController()).onSwitch();
+
+        // Switches Scene
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.manual_scene);
     }
 

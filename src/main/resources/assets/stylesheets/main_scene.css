@@ -22,3 +22,39 @@
     -fx-background-insets: 0,1,2;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
+.backButton {
+    -fx-pref-height: 30.0px;
+    -fx-pref-width: 65.0px;
+    -fx-text-fill: WHITE;
+    -fx-text-overrun: CLIP;
+    -fx-text-fill: #200;
+    -fx-background-color: linear-gradient(#f7d8c8, #f2b3b3);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.confirmButton {
+    -fx-pref-height: 35.0px;
+    -fx-pref-width: 85.0px;
+    -fx-text-fill: WHITE;
+    -fx-text-overrun: CLIP;
+    -fx-text-fill: #200;
+    -fx-background-color: linear-gradient(#bfffbf, #78fa96);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.confirmButtonGray {
+    -fx-pref-height: 35.0px;
+    -fx-pref-width: 85.0px;
+    -fx-text-fill: WHITE;
+    -fx-text-overrun: CLIP;
+    -fx-text-fill: #200;
+    -fx-background-color: linear-gradient(#c2c2c2, #f2f2f2);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}

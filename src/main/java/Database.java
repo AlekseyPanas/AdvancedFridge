@@ -1,5 +1,7 @@
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class Database {
 
@@ -42,6 +44,41 @@ public class Database {
             } else {
                 return null;
             }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+    }
+
+    // Returns all DB entries that fit the search string by product name
+    public ArrayList<Product> searchSelect (String searchString) {
+        try (Statement stmt = this.conn.createStatement();
+             ResultSet rs = stmt.executeQuery("select ID, barcode, product_name from food_table")){
+
+            ArrayList<Product> dbProducts = new ArrayList<>();
+
+            while (rs.next()) {
+                // Adds products to list from db
+                dbProducts.add(new Product(rs.getInt("ID"),
+                        rs.getString("barcode"),
+                        rs.getString("product_name")));
+            }
+
+            // Removes products that don't fit the search string
+            ArrayList<Product> removeProducts = new ArrayList<>();
+            for (int i = 0; i < dbProducts.size(); i++) {
+                if (!dbProducts.get(i).product_name.toLowerCase(Locale.ROOT).contains(searchString.toLowerCase(Locale.ROOT))) {
+                    removeProducts.add(dbProducts.get(i));
+                }
+            }
+            for (int i = 0; i < removeProducts.size(); i++) {
+                dbProducts.remove(removeProducts.get(i));
+            }
+
+            // Returns final product list
+            return dbProducts;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
