@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;); -fx-padding: 45px;" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manual_scene_controller">
+<VBox fx:id="skyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-padding: 45px;" styleClass="daySky" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manual_scene_controller">
    <children>
       <HBox alignment="CENTER" prefHeight="75.0" prefWidth="657.0">
          <children>

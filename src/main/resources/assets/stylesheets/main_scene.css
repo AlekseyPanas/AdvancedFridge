@@ -12,6 +12,18 @@
     -fx-pref-height: 25.0px;
 }
 
+.daySky {
+    -fx-background-image: url("../images/sky/day.png");
+}
+
+.sunsetSky {
+    -fx-background-image: url("../images/sky/sunset.png");
+}
+
+.nightSky {
+    -fx-background-image: url("../images/sky/night.png");
+}
+
 .takeButton {
     -fx-pref-height: 25.0px;
     -fx-pref-width: 45.0px;

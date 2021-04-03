@@ -11,16 +11,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;);" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_scene_controller">
+<VBox fx:id="skyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" styleClass="daySky" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_scene_controller">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="747.0">
          <children>
-            <Label alignment="CENTER" prefHeight="65.0" prefWidth="246.0" style="-fx-text-alignment: &quot;center&quot;;" text="1/9/21" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
+            <Label fx:id="dashDate" alignment="CENTER" prefHeight="65.0" prefWidth="246.0" style="-fx-text-alignment: &quot;center&quot;;" text="1/9/21" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="System Bold" size="44.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="206.0" style="-fx-text-alignment: &quot;center&quot;;" text="8:08 PM" textFill="WHITE" textOverrun="CLIP">
+            <Label fx:id="dashTime" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="65.0" prefWidth="206.0" style="-fx-text-alignment: &quot;center&quot;;" text="8:08 PM" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="System Bold" size="44.0" />
                </font>

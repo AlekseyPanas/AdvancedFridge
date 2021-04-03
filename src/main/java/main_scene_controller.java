@@ -14,6 +14,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.abs;
@@ -24,10 +25,9 @@ public class main_scene_controller implements Initializable {
     public VBox expireContainer;
     public VBox allProductsContainer;
     public TextField searchBar;
-
-    // Timelines
-    private Timeline expireTimer;
-    private Timeline pingScaleTimer;
+    // Dashboard date and time
+    public Label dashDate;
+    public Label dashTime;
 
     // EVENT HANDLERS
     // ======================================
@@ -35,6 +35,22 @@ public class main_scene_controller implements Initializable {
     // Search field event
     public void searchFunction() {
         populateProductList(searchBar.getText());
+    }
+
+    public void setTimeAndDate() {
+        Calendar calendar = Calendar.getInstance();
+        String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+        String final_time = hour  + ":" + minute;
+
+        LocalDate now = LocalDate.now();
+        String month = String.valueOf(now.getMonthValue());
+        String day = String.valueOf(now.getDayOfMonth());
+        String year = String.valueOf(now.getYear());
+        String final_date = month + "/" + day + "/" + year;
+
+        dashDate.setText(final_date);
+        dashTime.setText(final_time);
     }
 
     // Called when switching back to this scene
@@ -87,14 +103,14 @@ public class main_scene_controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("INIT CALLED");
-        System.out.println(expireContainer);
 
         // Populates products
         populateProductList("");
         populateExpireList();
 
         // Sets timeline to update expiration list
-        expireTimer = new Timeline(
+        // Timelines
+        Timeline expireTimer = new Timeline(
                 new KeyFrame(Duration.seconds(5), e -> {
                     populateExpireList();
                 })
@@ -102,7 +118,15 @@ public class main_scene_controller implements Initializable {
         expireTimer.setCycleCount(Timeline.INDEFINITE);
         expireTimer.play();
 
-        pingScaleTimer = new Timeline(
+        Timeline skyTimer = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    setTimeAndDate();
+                })
+        );
+        skyTimer.setCycleCount(Timeline.INDEFINITE);
+        skyTimer.play();
+
+        Timeline pingScaleTimer = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     if (Fridge.intake.getScale().getWeight() > 0) {
                         Stage stage = ((Stage) (Fridge.main_scene.getWindow()));
