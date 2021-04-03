@@ -10,24 +10,24 @@ This project does not go
 with any actual hardware prototypes and is completely theoretical. It includes
 use of the camera sensor, and simulates a weight scale class, among other things, but
 the primary aspect is the management of the main dashboard through which this fridge
-would be controller
+would be controlled
 
 ### Development Progress
 
-- [ ] Camera Sensor:  
-  ![50%](https://progress-bar.dev/100)
+- [x] Camera Sensor:  
+  ![100%](https://progress-bar.dev/100)
 
-- [ ] Scale Sensor:  
-  ![50%](https://progress-bar.dev/0)
+- [x] Scale Sensor:  
+  ![100%](https://progress-bar.dev/100)
 
-- [ ] Intake:  
-  ![50%](https://progress-bar.dev/20)
+- [x] Intake:  
+  ![100%](https://progress-bar.dev/100)
 
 - [ ] JavaFX Dashboard:  
-  ![50%](https://progress-bar.dev/75)
+  ![80%](https://progress-bar.dev/80)
 
 - [ ] Overall:  
-  ![50%](https://progress-bar.dev/70)
+  ![85%](https://progress-bar.dev/85)
 
 ### Planned Features
 Additional features in mind:

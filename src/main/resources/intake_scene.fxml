@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #00bfff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="intake_scene_controller">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="intake_scene_controller">
     <children>
         <Label alignment="CENTER" prefHeight="200.0" prefWidth="800.0" text="Product Detected">
             <font>
@@ -47,5 +47,14 @@
                 <Region prefHeight="200.0" prefWidth="200.0" />
             </children>
         </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#backButton" prefWidth="111.0" styleClass="backButton" stylesheets="@assets/stylesheets/main_scene.css" text="Back">
+               <font>
+                  <Font name="Cooper Black" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
     </children>
 </VBox>

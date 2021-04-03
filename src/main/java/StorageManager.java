@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -18,7 +18,7 @@ public class StorageManager {
     // Gets the hour difference between now and desired date
     public static int getDateDifference(LocalDate date) {
         LocalDate now = LocalDate.now();
-        return Period.between(now, date).getDays() * 24;
+        return Math.round(ChronoUnit.DAYS.between(now, date)) * 24;
     }
 
     public StorageManager() throws IOException, ParseException {

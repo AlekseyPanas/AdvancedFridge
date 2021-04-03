@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="confirm_scene_controller"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="747.0" style="-fx-background-image: url(&quot;assets/images/sky/day.png&quot;); -fx-padding: 45px;" stylesheets="@assets/stylesheets/main_scene.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="confirm_scene_controller">
+   <children>
+      <HBox alignment="CENTER" prefHeight="75.0" prefWidth="657.0">
+         <children>
+            <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Product's Expiration:">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="75.0" prefWidth="657.0">
+         <children>
+            <DatePicker fx:id="expirationPicker" onAction="#onDateSelected" promptText="Expiration Date" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <HBox alignment="CENTER" layoutX="164.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#backButtonHandler" prefHeight="44.0" prefWidth="80.0" style="-fx-text-fill: #200;" styleClass="backButton" stylesheets="@assets/stylesheets/main_scene.css" text="Cancel">
+                     <font>
+                        <Font name="Aparajita" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="confirmButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#confirmButtonHandler" prefHeight="40.0" prefWidth="153.0" style="fx: 10px;" styleClass="confirmButton" text="Add Product">
+                     <font>
+                        <Font name="Andalus" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

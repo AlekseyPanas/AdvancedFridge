@@ -64,6 +64,9 @@ public class manual_scene_controller implements Initializable {
 
         // Fills list initially
         populateList("");
+
+        // Clears text
+        dbSearchBar.setText("");
     }
 
     // Handles back button
@@ -78,6 +81,9 @@ public class manual_scene_controller implements Initializable {
         if (isConfirmActive && selectedItem != null) {
             // Set selected product of confirm scene
             confirm_scene_controller.selectedProduct = selectedItem;
+
+            // Calls onSwitch for expiration date scene
+            ((confirm_scene_controller) Fridge.confirm_scene_loader.getController()).onSwitch();
 
             // Move to expiration date confirm scene
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.confirm_scene);

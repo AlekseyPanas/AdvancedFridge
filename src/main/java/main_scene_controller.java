@@ -37,6 +37,12 @@ public class main_scene_controller implements Initializable {
         populateProductList(searchBar.getText());
     }
 
+    // Called when switching back to this scene
+    public void onSwitch () {
+        searchBar.setText("");
+        populateProductList("");
+    }
+
     public void runTakeButton(String[] id_and_date) {
         String[] splitDate = id_and_date[1].split("-");
         LocalDate expireDate = LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]));
