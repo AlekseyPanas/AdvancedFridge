@@ -41,6 +41,9 @@ public class main_scene_controller implements Initializable {
         Calendar calendar = Calendar.getInstance();
         String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
         String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
         String final_time = hour  + ":" + minute;
 
         LocalDate now = LocalDate.now();
