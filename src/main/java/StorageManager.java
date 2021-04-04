@@ -133,15 +133,31 @@ public class StorageManager {
 
     // Add new item to storage array
     public void add(int id, LocalDate date, int quantity) {
-        ActualProduct[] prodArr = new ActualProduct[actualProducts.length + 1];
+        boolean exists = false;
+        for (int i = 0; i < actualProducts.length; i++) {
+            // Checks if product already exists
+            if (actualProducts[i].ID == id && date.isEqual(actualProducts[i].expiration)) {
+                actualProducts[i].quantity += quantity;
 
-        System.arraycopy(actualProducts, 0, prodArr, 0, actualProducts.length);
+                exists = true;
 
-        Product prod = Fridge.db.getItemFromID(id);
-        prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
-                date, prod.isQuantifiable, quantity);
+                // Exits loop
+                break;
+            }
+        }
 
-        actualProducts = prodArr;
+        if (!exists) {
+            // Adds new product
+            ActualProduct[] prodArr = new ActualProduct[actualProducts.length + 1];
+
+            System.arraycopy(actualProducts, 0, prodArr, 0, actualProducts.length);
+
+            Product prod = Fridge.db.getItemFromID(id);
+            prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
+                    date, prod.isQuantifiable, quantity);
+
+            actualProducts = prodArr;
+        }
     }
 
     // Remove item from storage array or subtracts its quantity

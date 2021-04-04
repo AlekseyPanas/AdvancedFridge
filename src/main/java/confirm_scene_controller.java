@@ -78,6 +78,9 @@ public class confirm_scene_controller implements Initializable {
 
     // Called when switching to this scene
     public void onSwitch () {
+        quantityBox.getChildren().clear();
+        quantityField.setText("");
+
         // Checks if quantity is a necessary field
         if (selectedProduct.isQuantifiable) {
             quantityBox.getChildren().add(quantityField);
