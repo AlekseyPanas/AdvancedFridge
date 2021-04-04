@@ -26,6 +26,10 @@ public class intake_scene_controller implements Initializable {
     }
 
     public void StartScan(ActionEvent event) {
+        // Calls switch method in manual scene
+        ((scan_scene_controller) Fridge.scan_scene_loader.getController()).onSwitch();
+
+        // Switches Scene
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.scan_scene);
     }
 

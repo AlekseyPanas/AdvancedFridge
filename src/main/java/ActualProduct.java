@@ -1,11 +1,7 @@
 import java.time.LocalDate;
 
-public class ActualProduct{
-    public int ID;
-    public String barcode;
-    public String product_name;
+public class ActualProduct extends Product{
     public LocalDate expiration;
-    public boolean isQuantifiable;
     public int quantity;
 
     /*public ActualProduct (int ID, String barcode, String product_name, LocalDate expire) {
@@ -18,11 +14,8 @@ public class ActualProduct{
     }*/
 
     public ActualProduct (int ID, String barcode, String product_name, LocalDate expire, boolean isQuantifiable, int quantity) {
-        this.ID = ID;
-        this.barcode = barcode;
-        this.product_name = product_name;
+        super(ID, barcode, product_name, isQuantifiable);
         this.expiration = expire;
-        this.isQuantifiable = isQuantifiable;
         this.quantity = quantity;
     }
 }
