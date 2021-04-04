@@ -24,9 +24,11 @@ public class StorageManager {
     public StorageManager() throws IOException, ParseException {
         ArrayList<Integer> idList = new ArrayList<>();
         ArrayList<LocalDate> dateList = new ArrayList<>();
+        ArrayList<Integer> quantityList = new ArrayList<>();
 
         for (JSONObject item : (Iterable<JSONObject>) ((JSONObject) new JSONParser().parse(new FileReader(Constants.STORAGE_FILE))).get("items")) {
             idList.add(Math.toIntExact((Long) item.get("id")));
+            quantityList.add(Math.toIntExact((Long) item.get("quantity")));
             dateList.add(LocalDate.parse((String) item.get("expire"), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         }
 
@@ -36,7 +38,8 @@ public class StorageManager {
         for (int i = 0; i < idList.size(); i++) {
             Product prod = Fridge.db.getItemFromID(idList.get(i));
 
-            actualProducts[i] = new ActualProduct(prod.ID, prod.barcode, prod.product_name, dateList.get(i));
+            actualProducts[i] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
+                    dateList.get(i), prod.isQuantifiable, quantityList.get(i));
         }
     }
 
@@ -129,38 +132,61 @@ public class StorageManager {
     }
 
     // Add new item to storage array
-    public void add(int id, LocalDate date) {
+    public void add(int id, LocalDate date, int quantity) {
         ActualProduct[] prodArr = new ActualProduct[actualProducts.length + 1];
 
         System.arraycopy(actualProducts, 0, prodArr, 0, actualProducts.length);
 
         Product prod = Fridge.db.getItemFromID(id);
-        prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name, date);
+        prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
+                date, prod.isQuantifiable, quantity);
 
         actualProducts = prodArr;
     }
 
-    // Remove item from storage array
+    // Remove item from storage array or subtracts its quantity
     public void remove(int id, LocalDate date) {
-        if (actualProducts.length > 1) {
-            ActualProduct[] new_prods = new ActualProduct[actualProducts.length - 1];
 
-            int idx = 0;
-            boolean found_item = false;
+        // Finds item
+        ActualProduct item;
+        boolean found = false;
 
-            for (int i = 0; i < actualProducts.length; i++) {
-                if (!(actualProducts[i].ID == id && date.toString().equals(actualProducts[i].expiration.toString())) || found_item) {
-                    new_prods[idx] = actualProducts[i];
-                    idx++;
-                } else {
-                    found_item = true;
+        for (int j = 0; j < actualProducts.length; j++) {
+            if (actualProducts[j].ID == id && date.toString().equals(actualProducts[j].expiration.toString()) && !found) {
+                item = actualProducts[j];
+                found = true;
+
+                // Subtracts quantity
+                if (item.isQuantifiable) {
+                    item.quantity--;
+                }
+
+                // Checks if item removal is needed
+                if ( (!item.isQuantifiable) || (item.quantity <= 0) ) {
+
+                    // Removes item
+                    if (actualProducts.length > 1) {
+                        ActualProduct[] new_prods = new ActualProduct[actualProducts.length - 1];
+
+                        int idx = 0;
+                        boolean found_item = false;
+
+                        for (int i = 0; i < actualProducts.length; i++) {
+                            if (!(actualProducts[i].ID == id && date.toString().equals(actualProducts[i].expiration.toString())) || found_item) {
+                                new_prods[idx] = actualProducts[i];
+                                idx++;
+                            } else {
+                                found_item = true;
+                            }
+                        }
+
+                        actualProducts = new_prods;
+                        for (ActualProduct prod: actualProducts) {System.out.println(prod);}
+                    } else {
+                        actualProducts = new ActualProduct[0];
+                    }
                 }
             }
-
-            actualProducts = new_prods;
-            for (ActualProduct prod: actualProducts) {System.out.println(prod);}
-        } else {
-            actualProducts = new ActualProduct[0];
         }
     }
 
@@ -171,6 +197,7 @@ public class StorageManager {
             JSONObject item = new JSONObject();
             item.put("id", actualProducts[i].ID);
             item.put("expire", actualProducts[i].expiration.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+            item.put("quantity", actualProducts[i].quantity);
             array.add(item);
         }
         object.put("items", array);

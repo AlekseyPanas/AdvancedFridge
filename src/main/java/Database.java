@@ -40,7 +40,8 @@ public class Database {
                 // Gets results and creates product object
                 return new Product(rs.getInt("ID"),
                         rs.getString("barcode"),
-                        rs.getString("product_name"));
+                        rs.getString("product_name"),
+                        rs.getInt("isQuantifiable") == 1);
             } else {
                 return null;
             }
@@ -55,7 +56,7 @@ public class Database {
     // Returns all DB entries that fit the search string by product name
     public ArrayList<Product> searchSelect (String searchString) {
         try (Statement stmt = this.conn.createStatement();
-             ResultSet rs = stmt.executeQuery("select ID, barcode, product_name from food_table")){
+             ResultSet rs = stmt.executeQuery("select ID, barcode, product_name, isQuantifiable from food_table")){
 
             ArrayList<Product> dbProducts = new ArrayList<>();
 
@@ -63,7 +64,8 @@ public class Database {
                 // Adds products to list from db
                 dbProducts.add(new Product(rs.getInt("ID"),
                         rs.getString("barcode"),
-                        rs.getString("product_name")));
+                        rs.getString("product_name"),
+                        rs.getInt("isQuantifiable") == 1));
             }
 
             // Removes products that don't fit the search string
@@ -89,12 +91,12 @@ public class Database {
 
     // Returns food item from db based on given barcode
     public Product getItemFromBarcode (String barcodeID) {
-        return this.executeSelect(String.format("SELECT ID, barcode, product_name FROM food_table where barcode = %s;", barcodeID));
+        return this.executeSelect(String.format("SELECT ID, barcode, product_name, isQuantifiable FROM food_table where barcode = %s;", barcodeID));
     }
 
     // Returns food item from db based on given ID
     public Product getItemFromID (int ID){
-        return this.executeSelect(String.format("SELECT ID, barcode, product_name FROM food_table where ID = %s;", ID));
+        return this.executeSelect(String.format("SELECT ID, barcode, product_name, isQuantifiable FROM food_table where ID = %s;", ID));
     }
 
     // Closes DB connection

@@ -149,7 +149,7 @@ public class main_scene_controller implements Initializable {
         Font davidFont = new Font("David", 15.0);
         Font systemFont = new Font("System Bold", 12.0);
 
-        Label prodTitle = new Label(product.product_name);
+        Label prodTitle = new Label((product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name));
         prodTitle.getStyleClass().add("pdTitle");
         prodTitle.setFont(davidFont);
 
@@ -194,7 +194,7 @@ public class main_scene_controller implements Initializable {
         Font davidFont = new Font("David", 15.0);
         Font systemFont = new Font("System Bold", 12.0);
 
-        Label prodTitle = new Label(product.product_name);
+        Label prodTitle = new Label((product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name));
         prodTitle.getStyleClass().add("exTitle");
         prodTitle.setFont(davidFont);
 

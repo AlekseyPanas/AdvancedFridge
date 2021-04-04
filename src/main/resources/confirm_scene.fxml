@@ -23,6 +23,7 @@
             <DatePicker fx:id="expirationPicker" onAction="#onDateSelected" promptText="Expiration Date" />
          </children>
       </HBox>
+      <HBox fx:id="quantityBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <HBox alignment="CENTER" layoutX="164.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
