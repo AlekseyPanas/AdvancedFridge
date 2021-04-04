@@ -38,7 +38,6 @@ public class scan_scene_controller implements Initializable {
                 })
         );
         cameraTimer.setCycleCount(Timeline.INDEFINITE);
-        cameraTimer.play();
     }
 
     // Called by intake scene controller when switching to this scene
@@ -46,12 +45,18 @@ public class scan_scene_controller implements Initializable {
         // Deactivated Confirm
         deactivateConfirm();
         isConfirmActive = false;
+
+        // Starts timer
+        cameraTimer.play();
     }
 
     // Handles back button
     public void backButtonHandler(ActionEvent event) {
         // Return to intake menu scene
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.intake_menu);
+
+        // Stops timer
+        cameraTimer.stop();
     }
 
     // Updates CSS classes to visually deactivate button
@@ -68,15 +73,20 @@ public class scan_scene_controller implements Initializable {
 
     // Handles confirm button
     public void confirmButtonHandler(ActionEvent event) {
+        // TO SAZZAD: MODIFY THE CONDITION IF NECESSARY
+        if (isConfirmActive) {
+            // Set selected product of confirm scene
+            confirm_scene_controller.selectedProduct = selectedItem;
 
+            // Calls onSwitch for expiration date scene
+            ((confirm_scene_controller) Fridge.confirm_scene_loader.getController()).onSwitch();
 
-        // Set selected product of confirm scene
-        confirm_scene_controller.selectedProduct = selectedItem;
+            // Move to expiration date confirm scene
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.confirm_scene);
 
-        // Calls onSwitch for expiration date scene
-        ((confirm_scene_controller) Fridge.confirm_scene_loader.getController()).onSwitch();
+            // Stops camera
+            cameraTimer.stop();
+        }
 
-        // Move to expiration date confirm scene
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(Fridge.confirm_scene);
     }
 }

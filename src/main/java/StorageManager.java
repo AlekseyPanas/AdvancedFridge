@@ -71,6 +71,32 @@ public class StorageManager {
         return expiringProducts;
     }
 
+    // Products saved by custom name have negative IDs. This gets the next available ID
+    public int getNextCustomID () {
+        // ID to be tested
+        int currentID = -1;
+
+        // stores whether test deemed the ID available
+        boolean valid = false;
+
+        // Searches IDs until valid
+        while (!valid) {
+            // Innocent ID until proven guilty
+            valid = true;
+
+            // Checks if ID already exists
+            for (ActualProduct actualProduct : actualProducts) {
+                if (actualProduct.ID == currentID) {
+                    // If exists, set valid to false for another while loop pass and decrement ID
+                    valid = false;
+                    currentID--;
+                    break;
+                }
+            }
+        }
+        return currentID;
+    }
+
     // Counts how many products from actualProducts list contain the searchString
     private int getAmountMatched(String searchString) {
         int count = 0;
@@ -132,12 +158,12 @@ public class StorageManager {
     }
 
     // Add new item to storage array
-    public void add(int id, LocalDate date, int quantity) {
+    public void add(ActualProduct product) {
         boolean exists = false;
         for (int i = 0; i < actualProducts.length; i++) {
             // Checks if product already exists
-            if (actualProducts[i].ID == id && date.isEqual(actualProducts[i].expiration)) {
-                actualProducts[i].quantity += quantity;
+            if (actualProducts[i].ID == product.ID && product.expiration.isEqual(actualProducts[i].expiration)) {
+                actualProducts[i].quantity += product.quantity;
 
                 exists = true;
 
@@ -152,9 +178,8 @@ public class StorageManager {
 
             System.arraycopy(actualProducts, 0, prodArr, 0, actualProducts.length);
 
-            Product prod = Fridge.db.getItemFromID(id);
-            prodArr[actualProducts.length] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
-                    date, prod.isQuantifiable, quantity);
+            prodArr[actualProducts.length] = new ActualProduct(product.ID, product.barcode, product.product_name,
+                    product.expiration, product.isQuantifiable, product.quantity);
 
             actualProducts = prodArr;
         }

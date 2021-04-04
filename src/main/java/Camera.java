@@ -35,7 +35,7 @@ public class Camera {
                 } catch (NotFoundException e) {
                     id = null;
                 }
-                System.out.println(id);
+                //System.out.println(id);
                 return SwingFXUtils.toFXImage(image, null);
             }
         }

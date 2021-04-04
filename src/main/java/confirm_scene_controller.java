@@ -115,9 +115,15 @@ public class confirm_scene_controller implements Initializable {
 
             // Adds product
             if (selectedProduct.isQuantifiable) {
-                Fridge.store.add(selectedProduct.ID, selectedDate, Integer.parseInt(quantityField.getText()));
+                Fridge.store.add(
+                        new ActualProduct(selectedProduct.ID, selectedProduct.barcode, selectedProduct.product_name,
+                                selectedDate, selectedProduct.isQuantifiable, Integer.parseInt(quantityField.getText()))
+                );
             } else {
-                Fridge.store.add(selectedProduct.ID, selectedDate, -1);
+                Fridge.store.add(
+                        new ActualProduct(selectedProduct.ID, selectedProduct.barcode, selectedProduct.product_name,
+                                selectedDate, selectedProduct.isQuantifiable, -1)
+                );
             }
 
             // Calls onSwitch and switches to main scene
