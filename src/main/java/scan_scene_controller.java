@@ -45,7 +45,7 @@ public class scan_scene_controller implements Initializable {
 
                     // Checks if barcode ID detected
                     String barID = Fridge.intake.getCamera().getId();
-                    System.out.println(barID);
+                    //System.out.println(barID);
 
                     if (barID != null) {
                         selectedItem = Fridge.db.getItemFromBarcode(barID);

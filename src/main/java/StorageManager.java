@@ -236,7 +236,7 @@ public class StorageManager {
                         }
 
                         actualProducts = new_prods;
-                        for (ActualProduct prod: actualProducts) {System.out.println(prod);}
+                        //for (ActualProduct prod: actualProducts) {System.out.println(prod);}
                     } else {
                         actualProducts = new ActualProduct[0];
                     }
