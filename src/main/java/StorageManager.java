@@ -25,21 +25,35 @@ public class StorageManager {
         ArrayList<Integer> idList = new ArrayList<>();
         ArrayList<LocalDate> dateList = new ArrayList<>();
         ArrayList<Integer> quantityList = new ArrayList<>();
+        // Only for custom items
+        ArrayList<String> productNames = new ArrayList<>();
 
         for (JSONObject item : (Iterable<JSONObject>) ((JSONObject) new JSONParser().parse(new FileReader(Constants.STORAGE_FILE))).get("items")) {
             idList.add(Math.toIntExact((Long) item.get("id")));
             quantityList.add(Math.toIntExact((Long) item.get("quantity")));
             dateList.add(LocalDate.parse((String) item.get("expire"), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+
+            if (((Long) item.get("id")) < 0) {
+                productNames.add((String) item.get("prodName"));
+            } else {
+                productNames.add(null);
+            }
         }
 
 
         actualProducts = new ActualProduct[idList.size()];
 
         for (int i = 0; i < idList.size(); i++) {
-            Product prod = Fridge.db.getItemFromID(idList.get(i));
+            int ID = idList.get(i);
+            if (ID >= 0) {
+                Product prod = Fridge.db.getItemFromID(ID);
 
-            actualProducts[i] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
-                    dateList.get(i), prod.isQuantifiable, quantityList.get(i));
+                actualProducts[i] = new ActualProduct(prod.ID, prod.barcode, prod.product_name,
+                        dateList.get(i), prod.isQuantifiable, quantityList.get(i));
+            } else /* Manages custom products */ {
+                actualProducts[i] = new ActualProduct(ID, "N/A", productNames.get(i), dateList.get(i), true, quantityList.get(i));
+            }
+
         }
     }
 
@@ -239,6 +253,9 @@ public class StorageManager {
             item.put("id", actualProducts[i].ID);
             item.put("expire", actualProducts[i].expiration.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
             item.put("quantity", actualProducts[i].quantity);
+            if (actualProducts[i].ID < 0) {
+                item.put("prodName", actualProducts[i].product_name);
+            }
             array.add(item);
         }
         object.put("items", array);

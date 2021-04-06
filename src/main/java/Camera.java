@@ -24,22 +24,32 @@ public class Camera {
     }
 
     public WritableImage next() throws NotFoundException {
-        capture.read(matrix);
         if (capture.isOpened()) {
+
             if (capture.read(matrix)) {
+
                 BufferedImage image = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
+
                 DataBufferByte dataBuffer = (DataBufferByte) image.getRaster().getDataBuffer();
+
                 matrix.get(0, 0, dataBuffer.getData());
+
                 try {
                     id = VisionManager.decode(image);
+
                 } catch (NotFoundException e) {
                     id = null;
                 }
+
                 //System.out.println(id);
                 return SwingFXUtils.toFXImage(image, null);
             }
         }
         return null;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void releaseCapture () {

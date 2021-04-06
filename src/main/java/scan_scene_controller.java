@@ -6,11 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class scan_scene_controller implements Initializable {
@@ -18,6 +21,9 @@ public class scan_scene_controller implements Initializable {
 
     public ImageView cameraFeed;
     public Button confirmButton;
+
+    public HBox prodTextContainer;
+    public Text productText;
 
     // Is the confirm button currently available (product selected)
     public boolean isConfirmActive = false;
@@ -30,11 +36,27 @@ public class scan_scene_controller implements Initializable {
         // Creates timeline to update camera feed
         cameraTimer = new Timeline(
                 new KeyFrame(Duration.seconds(.1), e -> {
+                    // Updates camera feed
                     try {
                         cameraFeed.setImage(Fridge.intake.getCamera().next());
                     } catch (NotFoundException notFoundException) {
                         notFoundException.printStackTrace();
                     }
+
+                    // Checks if barcode ID detected
+                    String barID = Fridge.intake.getCamera().getId();
+                    System.out.println(barID);
+
+                    if (barID != null) {
+                        selectedItem = Fridge.db.getItemFromBarcode(barID);
+
+                        if (selectedItem != null) {
+                            activateConfirm();
+                            productText.setText(selectedItem.product_name.toUpperCase(Locale.ROOT));
+                            toggleProdText(true);
+                        }
+                    }
+
                 })
         );
         cameraTimer.setCycleCount(Timeline.INDEFINITE);
@@ -44,7 +66,7 @@ public class scan_scene_controller implements Initializable {
     public void onSwitch() {
         // Deactivated Confirm
         deactivateConfirm();
-        isConfirmActive = false;
+        toggleProdText(false);
 
         // Starts timer
         cameraTimer.play();
@@ -59,16 +81,24 @@ public class scan_scene_controller implements Initializable {
         cameraTimer.stop();
     }
 
+    private void toggleProdText(boolean toggle) {
+        for (Node node: prodTextContainer.getChildren()) {
+            node.setVisible(toggle);
+        }
+    }
+
     // Updates CSS classes to visually deactivate button
-    public void deactivateConfirm () {
+    private void deactivateConfirm () {
         confirmButton.getStyleClass().clear();
         confirmButton.getStyleClass().add("confirmButtonGray");
+        isConfirmActive = false;
     }
 
     // Updates CSS classes to visually activate button
-    public void activateConfirm () {
+    private void activateConfirm () {
         confirmButton.getStyleClass().clear();
         confirmButton.getStyleClass().add("confirmButton");
+        isConfirmActive = true;
     }
 
     // Handles confirm button

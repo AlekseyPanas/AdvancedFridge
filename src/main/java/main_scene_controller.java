@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -149,12 +150,19 @@ public class main_scene_controller implements Initializable {
         HBox mainContainer = new HBox();
         mainContainer.getStyleClass().add("exItemContainer");
 
-        Font davidFont = new Font("David", 15.0);
-        Font systemFont = new Font("System Bold", 12.0);
+        Font davidFont = new Font("David", 12.0);
+        Font systemFont = new Font("System Bold", 10.0);
 
-        Label prodTitle = new Label((product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name));
+        String prodTitleText = (product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name);
+
+        Label prodTitle = new Label(prodTitleText);
         prodTitle.getStyleClass().add("pdTitle");
+        prodTitle.setMaxWidth(120);
         prodTitle.setFont(davidFont);
+
+        // Adds tooltip
+        Tooltip prodTooltip = new Tooltip(prodTitleText);
+        prodTitle.setTooltip(prodTooltip);
 
         Label prodExpire = new Label(expireMessage);
         prodExpire.getStyleClass().add("pdTitle");
@@ -181,11 +189,11 @@ public class main_scene_controller implements Initializable {
         String expireMessage = (abs(timeToExpire) > 24) ? ("(" + (timeToExpire / 24) + "d)") : ("(" + timeToExpire + "h)");
 
         String color;
-        if (timeToExpire < 3) {
+        if (timeToExpire < -30) {
             color = "red";
-        } else if (timeToExpire < 7) {
+        } else if (timeToExpire < -15) {
             color = "orange";
-        } else if (timeToExpire < 11) {
+        } else if (timeToExpire < 0) {
             color = "yellow";
         } else {
             color = "green";
@@ -194,16 +202,23 @@ public class main_scene_controller implements Initializable {
         HBox mainContainer = new HBox();
         mainContainer.getStyleClass().add("exItemContainer");
 
-        Font davidFont = new Font("David", 15.0);
-        Font systemFont = new Font("System Bold", 12.0);
+        Font davidFont = new Font("David", 12.0);
+        Font systemFont = new Font("System Bold", 10.0);
 
-        Label prodTitle = new Label((product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name));
+        String prodTitleText = (product.isQuantifiable ? ("(" + product.quantity + "x) ") : "").concat(product.product_name);
+
+        Label prodTitle = new Label(prodTitleText);
         prodTitle.getStyleClass().add("exTitle");
         prodTitle.setFont(davidFont);
+
+        // Adds tooltip
+        Tooltip prodTooltip = new Tooltip(prodTitleText);
+        prodTitle.setTooltip(prodTooltip);
 
         Label prodExpire = new Label(expireMessage);
         prodExpire.getStyleClass().add("exExpire");
         prodExpire.setStyle("-fx-text-fill: " + color);
+        prodTitle.setMaxWidth(120);
         prodExpire.setFont(davidFont);
 
         Button takeButton = new Button();
